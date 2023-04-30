@@ -1,5 +1,6 @@
 package guru.springframework.spring6reactive.domain;
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,8 @@ public class Customer {
 
     @Id
     private Integer id;
+
+    @Size(max=255)
     private String customerName;
 
     @CreatedDate
