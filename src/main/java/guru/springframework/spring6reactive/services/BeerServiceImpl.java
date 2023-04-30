@@ -19,6 +19,25 @@ public class BeerServiceImpl implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
+    public Mono<BeerDTO> patchBeer(Integer beerId, BeerDTO beerDTO) {
+        return beerRepository.findById(beerId)
+                .map(foundBeer -> {
+                    if ((beerDTO.getBeerName()!=null) && (!beerDTO.getBeerName().equals(foundBeer.getBeerName())))
+                         foundBeer.setBeerName(beerDTO.getBeerName());
+                    if ((beerDTO.getBeerStyle()!=null) && (!beerDTO.getBeerStyle().equals(foundBeer.getBeerStyle())))
+                       foundBeer.setBeerStyle(beerDTO.getBeerStyle());
+                    if  ((beerDTO.getPrice()!=null) && (!beerDTO.getPrice().equals(foundBeer.getPrice())))
+                        foundBeer.setPrice(beerDTO.getPrice());
+                    if  ((beerDTO.getUpc() !=null) && (!beerDTO.getUpc().equals(foundBeer.getUpc())))
+                         foundBeer.setUpc(beerDTO.getUpc());
+                    if  ((beerDTO.getQuantityOnHand()!=null)&&(!beerDTO.getQuantityOnHand().equals(foundBeer.getQuantityOnHand())))
+                         foundBeer.setQuantityOnHand(beerDTO.getQuantityOnHand());
+
+                    return foundBeer;
+                }).flatMap(beerRepository::save)
+                .map(beerMapper::beerToBeerDto);
+    }
+    @Override
     public Mono<BeerDTO> updateBeer(Integer beerId, BeerDTO beerDTO) {
         return beerRepository.findById(beerId)
                 .map(foundBeer -> {
