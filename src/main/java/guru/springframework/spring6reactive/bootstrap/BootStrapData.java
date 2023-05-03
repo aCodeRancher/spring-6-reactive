@@ -36,23 +36,24 @@ public class BootStrapData implements CommandLineRunner {
 
     private void loadCustomerData() {
         customerRepository.count().subscribe(count -> {
+            Customer c1 = Customer.builder()
+                    .customerName("Customer 1")
+                    .build();
+            Customer c2 = Customer.builder()
+                    .customerName("Customer 2")
+                    .build();
+            Customer c3 = Customer.builder()
+                    .customerName("Customer 3")
+                    .build();
             if(count == 0){
-                customerRepository.save(Customer.builder()
-                        .customerName("Customer 1")
-                        .build())
-                        .subscribe();
+                customerRepository.save(c1).subscribe();
 
-                customerRepository.save(Customer.builder()
-                                .customerName("Customer 2")
-                                .build())
-                        .subscribe();
+                customerRepository.save(c2).subscribe();
 
-                customerRepository.save(Customer.builder()
-                                .customerName("Customer 3")
-                                .build())
-                        .subscribe();
+                customerRepository.save(c3).subscribe();
             }
         });
+
     }
 
     private void loadBeerData() {
