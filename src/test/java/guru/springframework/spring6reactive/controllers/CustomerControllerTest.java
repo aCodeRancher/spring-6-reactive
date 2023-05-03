@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
@@ -21,13 +20,20 @@ class CustomerControllerTest {
     WebTestClient webTestClient;
 
     @Test
-    @Order(999)
+    @Order(4)
     void testDeleteCustomer() {
         webTestClient.delete()
-                .uri(CustomerController.CUSTOMER_PATH_ID, 1)
+                .uri(CustomerController.CUSTOMER_PATH_ID, 3)
                 .exchange()
                 .expectStatus()
                 .isNoContent();
+    }
+    @Test
+    void testDeleteNotFound() {
+        webTestClient.delete()
+                .uri(CustomerController.CUSTOMER_PATH_ID, 999)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -38,6 +44,15 @@ class CustomerControllerTest {
                 .body(Mono.just(getCustomerDto()), CustomerDTO.class)
                 .exchange()
                 .expectStatus().isNoContent();
+    }
+
+    @Test
+     void testUpdateNotFound() {
+        webTestClient.put()
+                .uri(CustomerController.CUSTOMER_PATH_ID, 999)
+                .body(Mono.just(getCustomerDto()), CustomerDTO.class)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -59,6 +74,13 @@ class CustomerControllerTest {
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
                 .expectBody(CustomerDTO.class);
+    }
+
+    @Test
+    void testGetNotFound() {
+        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 999)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
