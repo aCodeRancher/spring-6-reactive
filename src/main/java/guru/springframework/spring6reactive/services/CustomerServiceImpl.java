@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Mono<CustomerDTO> updateCustomer(Integer customerId, CustomerDTO customerDTO) {
         return customerRepository.findById(customerId)
-                .map(customer -> {
+                 .map(customer -> {
                     customer.setCustomerName(customerDTO.getCustomerName());
                     return customer;
                 }).flatMap(customerRepository::save)
@@ -59,7 +59,5 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Mono<Void> deleteCustomerById(Integer customerId) {
-        return customerRepository.deleteById(customerId);
-    }
+    public Mono<Void> deleteCustomerById(Integer customerId) {return customerRepository.deleteById(customerId);}
 }
